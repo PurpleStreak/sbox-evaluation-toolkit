@@ -1,0 +1,334 @@
+[
+ {
+  "id": "aes",
+  "properties": {
+   "n": 8,
+   "m": 8,
+   "bijective": true,
+   "balanced": true,
+   "involution": false
+  },
+  "metrics": {
+   "differentialUniformity": 4,
+   "differentialBranchNumber": 2,
+   "nonlinearity": 112,
+   "maxBias": 0.0625,
+   "linearBranchNumber": 2,
+   "boomerangUniformity": 6,
+   "absoluteIndicator": 32,
+   "linearStructures": 0,
+   "degree": 7,
+   "minComponentDegree": 7,
+   "quadraticEquations": 39,
+   "interpolationTerms": 9,
+   "sacMean": 0.504883,
+   "bicNl": 112,
+   "bicSac": 0.504604,
+   "fixedPoints": 0,
+   "oppositeFixedPoints": 0
+  },
+  "cycles": [
+   87,
+   81,
+   59,
+   27,
+   2
+  ],
+  "fixedPoints": []
+ },
+ {
+  "id": "aes-inv",
+  "properties": {
+   "n": 8,
+   "m": 8,
+   "bijective": true,
+   "balanced": true,
+   "involution": false
+  },
+  "metrics": {
+   "differentialUniformity": 4,
+   "differentialBranchNumber": 2,
+   "nonlinearity": 112,
+   "maxBias": 0.0625,
+   "linearBranchNumber": 2,
+   "boomerangUniformity": 6,
+   "absoluteIndicator": 32,
+   "linearStructures": 0,
+   "degree": 7,
+   "minComponentDegree": 7,
+   "quadraticEquations": 39,
+   "interpolationTerms": 255,
+   "sacMean": 0.504395,
+   "bicNl": 112,
+   "bicSac": 0.506138,
+   "fixedPoints": 0,
+   "oppositeFixedPoints": 0
+  },
+  "cycles": [
+   87,
+   81,
+   59,
+   27,
+   2
+  ],
+  "fixedPoints": []
+ },
+ {
+  "id": "present",
+  "properties": {
+   "n": 4,
+   "m": 4,
+   "bijective": true,
+   "balanced": true,
+   "involution": false
+  },
+  "metrics": {
+   "differentialUniformity": 4,
+   "differentialBranchNumber": 3,
+   "nonlinearity": 4,
+   "maxBias": 0.25,
+   "linearBranchNumber": 2,
+   "boomerangUniformity": 16,
+   "absoluteIndicator": 16,
+   "linearStructures": 9,
+   "degree": 3,
+   "minComponentDegree": 2,
+   "quadraticEquations": 21,
+   "interpolationTerms": 14,
+   "sacMean": 0.625,
+   "bicNl": 4,
+   "bicSac": 0.5625,
+   "fixedPoints": 0,
+   "oppositeFixedPoints": 1
+  },
+  "cycles": [
+   7,
+   4,
+   3,
+   2
+  ],
+  "fixedPoints": []
+ },
+ {
+  "id": "gift",
+  "properties": {
+   "n": 4,
+   "m": 4,
+   "bijective": true,
+   "balanced": true,
+   "involution": false
+  },
+  "metrics": {
+   "differentialUniformity": 6,
+   "differentialBranchNumber": 2,
+   "nonlinearity": 4,
+   "maxBias": 0.25,
+   "linearBranchNumber": 2,
+   "boomerangUniformity": 16,
+   "absoluteIndicator": 16,
+   "linearStructures": 9,
+   "degree": 3,
+   "minComponentDegree": 2,
+   "quadraticEquations": 21,
+   "interpolationTerms": 15,
+   "sacMean": 0.625,
+   "bicNl": 4,
+   "bicSac": 0.541667,
+   "fixedPoints": 0,
+   "oppositeFixedPoints": 1
+  },
+  "cycles": [
+   9,
+   7
+  ],
+  "fixedPoints": []
+ },
+ {
+  "id": "skinny4",
+  "properties": {
+   "n": 4,
+   "m": 4,
+   "bijective": true,
+   "balanced": true,
+   "involution": false
+  },
+  "metrics": {
+   "differentialUniformity": 4,
+   "differentialBranchNumber": 2,
+   "nonlinearity": 4,
+   "maxBias": 0.25,
+   "linearBranchNumber": 2,
+   "boomerangUniformity": 16,
+   "absoluteIndicator": 16,
+   "linearStructures": 9,
+   "degree": 3,
+   "minComponentDegree": 2,
+   "quadraticEquations": 21,
+   "interpolationTerms": 15,
+   "sacMean": 0.515625,
+   "bicNl": 4,
+   "bicSac": 0.5625,
+   "fixedPoints": 1,
+   "oppositeFixedPoints": 2
+  },
+  "cycles": [
+   9,
+   4,
+   2,
+   1
+  ],
+  "fixedPoints": [
+   15
+  ]
+ },
+ {
+  "id": "serpent0",
+  "properties": {
+   "n": 4,
+   "m": 4,
+   "bijective": true,
+   "balanced": true,
+   "involution": false
+  },
+  "metrics": {
+   "differentialUniformity": 4,
+   "differentialBranchNumber": 3,
+   "nonlinearity": 4,
+   "maxBias": 0.25,
+   "linearBranchNumber": 2,
+   "boomerangUniformity": 16,
+   "absoluteIndicator": 16,
+   "linearStructures": 9,
+   "degree": 3,
+   "minComponentDegree": 2,
+   "quadraticEquations": 21,
+   "interpolationTerms": 14,
+   "sacMean": 0.640625,
+   "bicNl": 4,
+   "bicSac": 0.552083,
+   "fixedPoints": 0,
+   "oppositeFixedPoints": 0
+  },
+  "cycles": [
+   7,
+   5,
+   2,
+   2
+  ],
+  "fixedPoints": []
+ },
+ {
+  "id": "prince",
+  "properties": {
+   "n": 4,
+   "m": 4,
+   "bijective": true,
+   "balanced": true,
+   "involution": false
+  },
+  "metrics": {
+   "differentialUniformity": 4,
+   "differentialBranchNumber": 2,
+   "nonlinearity": 4,
+   "maxBias": 0.25,
+   "linearBranchNumber": 2,
+   "boomerangUniformity": 10,
+   "absoluteIndicator": 8,
+   "linearStructures": 0,
+   "degree": 3,
+   "minComponentDegree": 3,
+   "quadraticEquations": 21,
+   "interpolationTerms": 15,
+   "sacMean": 0.4375,
+   "bicNl": 4,
+   "bicSac": 0.552083,
+   "fixedPoints": 0,
+   "oppositeFixedPoints": 1
+  },
+  "cycles": [
+   8,
+   4,
+   2,
+   2
+  ],
+  "fixedPoints": []
+ },
+ {
+  "id": "midori0",
+  "properties": {
+   "n": 4,
+   "m": 4,
+   "bijective": true,
+   "balanced": true,
+   "involution": true
+  },
+  "metrics": {
+   "differentialUniformity": 4,
+   "differentialBranchNumber": 2,
+   "nonlinearity": 4,
+   "maxBias": 0.25,
+   "linearBranchNumber": 2,
+   "boomerangUniformity": 16,
+   "absoluteIndicator": 16,
+   "linearStructures": 9,
+   "degree": 3,
+   "minComponentDegree": 2,
+   "quadraticEquations": 21,
+   "interpolationTerms": 13,
+   "sacMean": 0.40625,
+   "bicNl": 4,
+   "bicSac": 0.5625,
+   "fixedPoints": 4,
+   "oppositeFixedPoints": 2
+  },
+  "cycles": [
+   2,
+   2,
+   2,
+   2,
+   2,
+   2,
+   1,
+   1,
+   1,
+   1
+  ],
+  "fixedPoints": [
+   3,
+   7,
+   8,
+   9
+  ]
+ },
+ {
+  "id": "des1",
+  "properties": {
+   "n": 6,
+   "m": 4,
+   "bijective": false,
+   "balanced": true,
+   "involution": false
+  },
+  "metrics": {
+   "differentialUniformity": 16,
+   "differentialBranchNumber": 2,
+   "nonlinearity": 14,
+   "maxBias": 0.28125,
+   "linearBranchNumber": 2,
+   "boomerangUniformity": null,
+   "absoluteIndicator": 48,
+   "linearStructures": 0,
+   "degree": 5,
+   "minComponentDegree": 4,
+   "quadraticEquations": 1,
+   "interpolationTerms": null,
+   "sacMean": 0.619792,
+   "bicNl": 20,
+   "bicSac": 0.560764,
+   "fixedPoints": 0,
+   "oppositeFixedPoints": 0
+  },
+  "cycles": null,
+  "fixedPoints": []
+ }
+]
