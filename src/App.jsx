@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import HeatmapPanel from './components/HeatmapPanel.jsx';
 import Inspector from './components/Inspector.jsx';
+import MetricStrips from './components/MetricStrips.jsx';
 import TopBar from './components/TopBar.jsx';
 import { analyze } from './core/analyze.js';
 import { getPreset } from './core/presets.js';
@@ -81,6 +82,7 @@ export default function App() {
         <aside className="panel inspector">
           <h3>Inspector</h3>
           <Inspector analysis={current.analysis} table={table} selected={selected} />
+          <MetricStrips analysis={current.analysis} prev={current.prev} />
         </aside>
       </main>
       <footer className="foot small muted">

@@ -124,3 +124,22 @@ canvas.heatmap:focus-visible { outline: 2px solid var(--accent); outline-offset:
 .pairs { max-height: 180px; overflow: auto; border: 1px solid var(--hair); border-radius: 8px; padding: 6px 8px; margin-top: 6px; }
 .pairs div { font-family: ui-monospace, monospace; font-size: 12px; color: var(--text-2); }
 .eq { font-family: ui-monospace, monospace; background: var(--surface); padding: 6px 8px; border-radius: 6px; margin: 6px 0; overflow-wrap: anywhere; }
+
+/* Metric strips */
+.strip-legend { display: flex; align-items: center; gap: 6px; color: var(--text-2); margin-bottom: 8px; flex-wrap: wrap; }
+.key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.key.you { background: var(--you); }
+.key.ref { background: var(--ref); }
+.key.hist { background: var(--hist); border-radius: 2px; }
+.metrics { display: flex; flex-direction: column; gap: 12px; }
+.strip .row { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
+.strip .name { color: var(--text-2); }
+.strip .v { font-variant-numeric: tabular-nums; font-weight: 600; }
+.strip .delta.up { color: var(--good); }
+.strip .delta.down { color: var(--crit); }
+.strip svg { width: 100%; height: 40px; display: block; }
+.strip .pct { font-size: 11px; color: var(--muted); }
+.strip .desc { font-size: 11px; color: var(--muted); margin: 2px 0 0; }
+.strip.changed { animation: flash 1.2s ease-out; border-radius: 6px; }
+@keyframes flash { from { background: color-mix(in srgb, var(--accent) 18%, transparent); } to { background: transparent; } }
+.strip svg.lock, .lock { width: 11px; height: 11px; display: inline-block; vertical-align: -1px; color: var(--muted); }
