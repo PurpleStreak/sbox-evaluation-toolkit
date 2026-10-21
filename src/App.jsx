@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import HeatmapPanel from './components/HeatmapPanel.jsx';
 import Inspector from './components/Inspector.jsx';
 import MetricStrips from './components/MetricStrips.jsx';
+import SboxEditor from './components/SboxEditor.jsx';
 import SourcePanel from './components/SourcePanel.jsx';
 import Toast from './components/Toast.jsx';
 import TopBar from './components/TopBar.jsx';
@@ -93,6 +94,7 @@ export default function App() {
           <MetricStrips analysis={current.analysis} prev={current.prev} />
         </aside>
       </main>
+      <SboxEditor sbox={current.sbox} name={current.name} analysis={current.analysis} onLoad={load} onToast={showToast} />
       <Toast toast={toast} onDone={clearToast} />
       <footer className="foot small muted">
         S-Box Evaluation Toolkit · B P Pranavan Paramesh (MIS 222515010) · guided by Dr. Mahesh Joshi · Dept. of CSE, IIIT Pune
