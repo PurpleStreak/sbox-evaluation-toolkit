@@ -3,6 +3,7 @@ import HeatmapPanel from './components/HeatmapPanel.jsx';
 import Inspector from './components/Inspector.jsx';
 import MetricStrips from './components/MetricStrips.jsx';
 import TopBar from './components/TopBar.jsx';
+import VerdictRow from './components/VerdictRow.jsx';
 import { analyze } from './core/analyze.js';
 import { getPreset } from './core/presets.js';
 import { strongestDdtCell } from './lib/tables.js';
@@ -66,6 +67,7 @@ export default function App() {
         theme={theme}
         onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
       />
+      <VerdictRow analysis={current.analysis} />
       <main className="workbench">
         <aside className="panel source" />
         <HeatmapPanel

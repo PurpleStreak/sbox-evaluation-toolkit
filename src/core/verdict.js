@@ -119,7 +119,7 @@ export function verdict(a) {
   } else {
     alg = { level: 'strong', reason: 'no low-degree relations found' };
   }
-  out.push({ family: 'algebraic', title: 'Algebraic / higher-order', value: `min deg ${minDeg} · ${eqs} eq.`, ...alg });
+  out.push({ family: 'algebraic', title: 'Algebraic / higher-order', value: `deg ${minDeg} · ${eqs} eq.`, ...alg });
 
   const fp = a.structure.fixedPoints.length;
   const ofp = a.structure.oppositeFixedPoints.length;
@@ -129,7 +129,7 @@ export function verdict(a) {
   else if (fp + ofp === 0) st = { level: 'strong', reason: a.properties.involution ? 'no fixed points (but an involution)' : 'no fixed or opposite fixed points' };
   else if (fp + ofp > Math.max(2, (1 << n) / 32)) st = { level: 'weak', reason: `${fp} fixed and ${ofp} opposite fixed points` };
   else st = { level: 'caution', reason: `${fp} fixed and ${ofp} opposite fixed point${fp + ofp > 1 ? 's' : ''}` };
-  out.push({ family: 'structural', title: 'Structural', value: `${fp} fixed · ${ofp} opposite`, ...st });
+  out.push({ family: 'structural', title: 'Structural', value: `${fp} fixed · ${ofp} opp.`, ...st });
 
   const sacMean = a.avalanche.sac.mean;
   const sacCmp = sameSize ? compareToBaseline('sacMean', n, sacMean) : null;
