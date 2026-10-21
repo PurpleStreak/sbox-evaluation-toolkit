@@ -1,15 +1,101 @@
-:root {
-  color-scheme: light dark;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.5;
+/* Design tokens. Dark (matching the project slides) is the default; light is for print/screenshots. */
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --page: #000000;
+  --panel: #111110;
+  --surface: #1a1a19;
+  --hair: rgba(255, 255, 255, 0.1);
+  --grid: #2c2c2a;
+  --text: #f0efec;
+  --text-2: #c3c2b7;
+  --muted: #898781;
+  --accent: #d9f99d;
+  --accent-ink: #0b0b0b;
+  --you: #3987e5;
+  --ref: #d95926;
+  --hist: #4a4a46;
+  --good: #0ca30c;
+  --warn: #fab219;
+  --crit: #d03b3b;
+  --trivial: #2c2c2a;
+  --div-mid: #383835;
+  --div-pos: #3987e5;
+  --div-neg: #e66767;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --panel: #ffffff;
+  --surface: #fcfcfb;
+  --hair: rgba(11, 11, 11, 0.1);
+  --grid: #e1e0d9;
+  --text: #0b0b0b;
+  --text-2: #52514e;
+  --muted: #6d6b66;
+  --accent: #4d7c0f;
+  --accent-ink: #ffffff;
+  --you: #2a78d6;
+  --ref: #eb6834;
+  --hist: #c3c2b7;
+  --trivial: #e1e0d9;
+  --div-mid: #f0efec;
+  --div-pos: #1c5cab;
+  --div-neg: #c03a3a;
 }
 
-body {
-  margin: 0;
-}
+* { box-sizing: border-box; }
+html { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.45; }
+body { margin: 0; background: var(--page); color: var(--text); font-size: 14px; }
+h2 { font-size: 18px; font-weight: 500; margin: 0; }
+h3 { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-2); margin: 0 0 10px; }
+p { margin: 4px 0 10px; }
+code, .mono { font-family: ui-monospace, 'Cascadia Code', Menlo, monospace; font-size: 12px; }
+.small { font-size: 12px; }
+.muted { color: var(--muted); }
+.accent { color: var(--accent); }
+.err { color: var(--crit); min-height: 1em; }
 
-.app {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px 16px;
+.mode-explain .expert-only { display: none !important; }
+.mode-expert .explain-only { display: none !important; }
+
+button, select, textarea, input[type='number'] {
+  font: inherit; color: var(--text); background: var(--surface);
+  border: 1px solid var(--hair); border-radius: 8px; padding: 6px 10px;
+}
+button { cursor: pointer; }
+button:hover:not(:disabled) { border-color: var(--accent); }
+button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+button:disabled { opacity: 0.45; cursor: default; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-weight: 600; }
+button.ghost { background: transparent; }
+textarea { width: 100%; resize: vertical; font-family: ui-monospace, monospace; font-size: 12px; }
+select { width: 100%; }
+
+.chip { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--hair); color: var(--text-2); }
+.chip.warn { color: var(--warn); border-color: currentColor; }
+
+/* Top bar */
+.topbar { display: flex; align-items: center; gap: 24px; padding: 14px 24px; border-bottom: 1px solid var(--hair); position: sticky; top: 0; background: var(--page); z-index: 5; flex-wrap: wrap; }
+.brand { font-size: 20px; }
+.current { flex: 1; display: flex; gap: 8px; align-items: center; min-width: 0; }
+.current strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.toggles { display: flex; gap: 10px; }
+.seg { display: inline-flex; border: 1px solid var(--hair); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; background: transparent; }
+.seg button.on { background: var(--accent); color: var(--accent-ink); }
+
+.section-title { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+.section-title p { margin: 0; }
+
+/* Layout */
+.workbench { display: grid; grid-template-columns: 260px minmax(0, 1fr) 340px; gap: 14px; padding: 14px 24px; align-items: start; }
+.panel { background: var(--panel); border: 1px solid var(--hair); border-radius: 14px; padding: 14px; min-width: 0; }
+.foot { padding: 10px 24px 24px; }
+
+@media (max-width: 1250px) {
+  .workbench { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .topbar, .workbench, .foot { padding-left: 16px; padding-right: 16px; }
 }
