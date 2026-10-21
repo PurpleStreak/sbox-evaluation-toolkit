@@ -20,6 +20,3 @@ Thumbs.db
 # Env
 .env
 .env.*
-
-# Local design mock-ups (not part of the product)
-mockups/
