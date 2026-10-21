@@ -7,6 +7,24 @@ S-boxes, and for judging which classes of attack an S-box is weak against.
 > Indian Institute of Information Technology, Pune.
 > Author: B P Pranavan Paramesh (MIS 222515010) · Guide: Dr. Mahesh Joshi.
 
+## Features
+
+- **Attack verdict** — strong / caution / weak per attack family (differential, linear,
+  boomerang, differential-linear, algebraic, structural, avalanche), graded against the
+  best known values and 10,000 random permutations of the same size.
+- **Interactive tables** — DDT, LAT, BCT and DLCT as heatmaps; hover to read, click (or use
+  the arrow keys) to have a cell explained, e.g. the concrete input pairs behind a DDT entry.
+- **Metrics vs random** — each metric drawn against the distribution of random permutations,
+  with AES/PRESENT as a reference and affine-invariant metrics marked.
+- **Build S-boxes** — reference S-boxes (AES, PRESENT, GIFT, SKINNY, Serpent, PRINCE, Midori,
+  DES), random permutations, power maps x^d over GF(2^n) with affine maps, a simulated-annealing
+  search running in a Web Worker, or paste your own (hex, decimal, C arrays).
+- **Experiment** — swap entries in the table editor or apply a random affine transform and
+  watch which metrics change.
+- **Explain / Expert** modes and dark / light themes.
+
+Everything runs in the browser; there is no server.
+
 ## Status
 
 Work in progress.
@@ -21,6 +39,7 @@ npm run dev        # start the dev server at http://localhost:5173
 npm test           # run the unit tests
 npm run typecheck  # type-check JSDoc annotations
 npm run build      # production build into dist/
+npm run precompute # regenerate src/data/*.json (presets + random baseline, ~1.5 min)
 ```
 
 > **WSL users:** keep the project inside the Linux filesystem (e.g. `~/projects`),
@@ -31,6 +50,18 @@ npm run build      # production build into dist/
 - React 19 + Vite — UI and build
 - Plain JavaScript with JSDoc types, checked by the TypeScript compiler
 - Vitest — unit tests
+- Plain `<canvas>` heatmaps and SVG charts — no charting library
+
+## Project layout
+
+```
+src/core/       analysis engine (pure JS, unit-tested): DDT, LAT, BCT, DLCT, ANF,
+                SAC/BIC, generators, search, verdict rules
+src/data/       precomputed preset metrics and random-permutation baseline
+src/components/ React UI
+src/workers/    Web Worker running the heuristic search
+scripts/        build-time precomputation
+```
 
 ## License
 
