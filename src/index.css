@@ -99,3 +99,28 @@ select { width: 100%; }
 @media (max-width: 640px) {
   .topbar, .workbench, .foot { padding-left: 16px; padding-right: 16px; }
 }
+
+/* Heatmap panel */
+.heat-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tabs { display: inline-flex; gap: 4px; }
+.tabs button.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.heat-opts { display: flex; gap: 14px; }
+.check { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); }
+.heat-body { display: grid; grid-template-columns: 22px minmax(0, 512px) 70px; gap: 6px; margin-top: 8px; align-items: start; justify-content: center; }
+.axis-y { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; color: var(--muted); text-align: center; align-self: center; }
+.axis-x { font-size: 12px; color: var(--muted); text-align: center; height: 20px; }
+.canvas-wrap { position: relative; min-width: 0; }
+canvas.heatmap { width: 100%; display: block; border-radius: 6px; cursor: crosshair; image-rendering: pixelated; }
+canvas.heatmap:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tooltip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--hair); border-radius: 8px; padding: 6px 9px; font-size: 12px; white-space: nowrap; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35); z-index: 3; font-variant-numeric: tabular-nums; }
+.legend { font-size: 11px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; margin-top: 20px; }
+.legend .bar { width: 14px; height: 200px; border-radius: 4px; }
+.legend .lab { font-variant-numeric: tabular-nums; }
+.trivial-key i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--trivial); margin-right: 3px; vertical-align: -1px; }
+
+/* Inspector */
+.inspector-body { font-size: 13px; margin-bottom: 14px; }
+.inspector-body .big { font-size: 22px; font-variant-numeric: tabular-nums; }
+.pairs { max-height: 180px; overflow: auto; border: 1px solid var(--hair); border-radius: 8px; padding: 6px 8px; margin-top: 6px; }
+.pairs div { font-family: ui-monospace, monospace; font-size: 12px; color: var(--text-2); }
+.eq { font-family: ui-monospace, monospace; background: var(--surface); padding: 6px 8px; border-radius: 6px; margin: 6px 0; overflow-wrap: anywhere; }
