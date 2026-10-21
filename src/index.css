@@ -98,6 +98,8 @@ select { width: 100%; }
 }
 @media (max-width: 640px) {
   .topbar, .workbench, .foot { padding-left: 16px; padding-right: 16px; }
+  .topbar { gap: 10px; }
+  .current { order: 3; flex-basis: 100%; flex-wrap: wrap; }
 }
 
 /* Heatmap panel */
