@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import HeatmapPanel from './components/HeatmapPanel.jsx';
 import Inspector from './components/Inspector.jsx';
 import MetricStrips from './components/MetricStrips.jsx';
@@ -38,9 +38,9 @@ export default function App() {
   const showToast = useCallback((/** @type {string} */ text) => setToast({ id: Date.now(), text }), []);
   const clearToast = useCallback(() => setToast(null), []);
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
+  // Apply the theme during render (not in an effect): child canvases read the CSS colour
+  // variables in their own effects, which run before a parent's effect would.
+  if (document.documentElement.dataset.theme !== theme) document.documentElement.dataset.theme = theme;
 
   const load = useCallback(
     /**

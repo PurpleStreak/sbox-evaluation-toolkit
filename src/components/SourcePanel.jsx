@@ -93,7 +93,11 @@ export default function SourcePanel({ currentName, analysis, onLoad, onToast }) 
           </button>
         </div>
         <div className="power">
-          <span className="lbl small">Power map S(x) = A(x<sup>d</sup>) over GF(2ⁿ)</span>
+          <span className="lbl small">
+            <span>
+              Power map S(x) = A(x<sup>d</sup>) over GF(2ⁿ)
+            </span>
+          </span>
           <div className="inline-fields">
             <label className="lbl small">
               bits
