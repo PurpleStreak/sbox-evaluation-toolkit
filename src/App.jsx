@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import HeatmapPanel from './components/HeatmapPanel.jsx';
 import Inspector from './components/Inspector.jsx';
 import MetricStrips from './components/MetricStrips.jsx';
+import SourcePanel from './components/SourcePanel.jsx';
+import Toast from './components/Toast.jsx';
 import TopBar from './components/TopBar.jsx';
 import VerdictRow from './components/VerdictRow.jsx';
 import { analyze } from './core/analyze.js';
@@ -31,6 +33,9 @@ export default function App() {
   );
   const [mode, setMode] = usePersistentState('sbox.mode', /** @type {'explain' | 'expert'} */ ('explain'));
   const [theme, setTheme] = usePersistentState('sbox.theme', /** @type {'dark' | 'light'} */ ('dark'));
+  const [toast, setToast] = useState(/** @type {{ id: number, text: string } | null} */ (null));
+  const showToast = useCallback((/** @type {string} */ text) => setToast({ id: Date.now(), text }), []);
+  const clearToast = useCallback(() => setToast(null), []);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -42,6 +47,7 @@ export default function App() {
      * @param {import('./core/sbox.js').SBox} sbox
      * @param {string} name
      * @param {{ related?: boolean }} [opts]  related: derived from the current S-box (show deltas).
+     * @returns {import('./core/analyze.js').Analysis}
      */
     (sbox, name, opts = {}) => {
       const analysis = analyze(sbox);
@@ -52,10 +58,10 @@ export default function App() {
         setTable((t) => (analysis.tables[t] ? t : 'ddt'));
         setSelected(strongestDdtCell(analysis));
       }
+      return analysis;
     },
     [],
   );
-  void load;
 
   return (
     <div className={`app mode-${mode}`}>
@@ -69,7 +75,7 @@ export default function App() {
       />
       <VerdictRow analysis={current.analysis} />
       <main className="workbench">
-        <aside className="panel source" />
+        <SourcePanel currentName={current.name} analysis={current.analysis} onLoad={load} onToast={showToast} />
         <HeatmapPanel
           analysis={current.analysis}
           table={table}
@@ -87,6 +93,7 @@ export default function App() {
           <MetricStrips analysis={current.analysis} prev={current.prev} />
         </aside>
       </main>
+      <Toast toast={toast} onDone={clearToast} />
       <footer className="foot small muted">
         S-Box Evaluation Toolkit · B P Pranavan Paramesh (MIS 222515010) · guided by Dr. Mahesh Joshi · Dept. of CSE, IIIT Pune
       </footer>
