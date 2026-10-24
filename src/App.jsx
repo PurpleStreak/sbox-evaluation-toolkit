@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import EquivalencePanel from './components/EquivalencePanel.jsx';
 import HeatmapPanel from './components/HeatmapPanel.jsx';
 import Inspector from './components/Inspector.jsx';
 import MetricStrips from './components/MetricStrips.jsx';
@@ -94,6 +95,7 @@ export default function App() {
           <MetricStrips analysis={current.analysis} prev={current.prev} />
         </aside>
       </main>
+      <EquivalencePanel sbox={current.sbox} name={current.name} />
       <SboxEditor sbox={current.sbox} name={current.name} analysis={current.analysis} onLoad={load} onToast={showToast} />
       <Toast toast={toast} onDone={clearToast} />
       <footer className="foot small muted">
