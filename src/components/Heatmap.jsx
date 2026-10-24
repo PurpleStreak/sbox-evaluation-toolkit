@@ -12,6 +12,7 @@ import { get } from '../core/matrix.js';
  * @param {object} props
  * @param {import('../core/matrix.js').Matrix} props.matrix
  * @param {boolean} props.signed
+ * @param {boolean} props.trivialCol      Column 0 is trivial (greyed, ignored for maxima).
  * @param {number} props.max                Colour-scale maximum (non-trivial |entry|).
  * @param {boolean} props.logScale
  * @param {boolean} props.outlineMax        Outline cells equal to max.
@@ -20,7 +21,7 @@ import { get } from '../core/matrix.js';
  * @param {(cell: Cell) => void} props.onSelect
  * @param {string} props.label              Accessible description.
  */
-export default function Heatmap({ matrix, signed, max, logScale, outlineMax, selected, onHover, onSelect, label }) {
+export default function Heatmap({ matrix, signed, trivialCol, max, logScale, outlineMax, selected, onHover, onSelect, label }) {
   const canvasRef = useRef(/** @type {HTMLCanvasElement | null} */ (null));
   const [width, setWidth] = useState(512);
 
@@ -56,7 +57,7 @@ export default function Heatmap({ matrix, signed, max, logScale, outlineMax, sel
       for (let c = 0; c < m.cols; c++) {
         const v = get(m, r, c);
         let col;
-        if (r === 0 || (signed && c === 0)) col = trivial;
+        if (r === 0 || (trivialCol && c === 0)) col = trivial;
         else if (signed) col = v === 0 ? mid : mix(mid, v > 0 ? pos : neg, Math.min(1, norm(Math.abs(v))));
         else col = v === 0 ? surface : sequential(Math.min(1, norm(v)));
         img.data.set([col[0], col[1], col[2], 255], (r * m.cols + c) * 4);
@@ -81,7 +82,7 @@ export default function Heatmap({ matrix, signed, max, logScale, outlineMax, sel
         for (let c = 0; c < m.cols; c++) {
           const v = get(m, r, c);
           if (v === 0) continue;
-          const strong = Math.abs(v) / max > 0.55 && !(r === 0 || (signed && c === 0));
+          const strong = Math.abs(v) / max > 0.55 && !(r === 0 || (trivialCol && c === 0));
           // Bright high-value cells take dark text; saturated signed cells take white.
           ctx.fillStyle = strong ? (signed ? '#ffffff' : '#0b0b0b') : text;
           ctx.fillText(String(v), (c + 0.5) * cw, (r + 0.5) * ch);
@@ -95,7 +96,7 @@ export default function Heatmap({ matrix, signed, max, logScale, outlineMax, sel
       ctx.strokeStyle = cssVar('--accent');
       ctx.lineWidth = Math.max(1, dpr);
       for (let r = 1; r < m.rows; r++)
-        for (let c = signed ? 1 : 0; c < m.cols; c++)
+        for (let c = trivialCol ? 1 : 0; c < m.cols; c++)
           if (Math.abs(get(m, r, c)) === max) ctx.strokeRect(c * cw - pad, r * ch - pad, cw + 2 * pad, ch + 2 * pad);
     }
     if (selected) {
@@ -103,7 +104,7 @@ export default function Heatmap({ matrix, signed, max, logScale, outlineMax, sel
       ctx.lineWidth = 2 * dpr;
       ctx.strokeRect(selected.c * cw - pad - dpr, selected.r * ch - pad - dpr, cw + 2 * pad + 2 * dpr, ch + 2 * pad + 2 * dpr);
     }
-  }, [matrix, signed, max, logScale, outlineMax, selected, width]);
+  }, [matrix, signed, trivialCol, max, logScale, outlineMax, selected, width]);
 
   /** @param {React.MouseEvent<HTMLCanvasElement>} e */
   const cellAt = (e) => {

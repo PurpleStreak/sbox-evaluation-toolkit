@@ -54,10 +54,10 @@ const GUIDE = {
 export default function Inspector({ analysis, table, selected, onSelect }) {
   const info = TABLES[table];
   const matrix = /** @type {import('../core/matrix.js').Matrix} */ (analysis.tables[table]);
-  const distribution = useMemo(() => valueDistribution(matrix, info.signed), [matrix, info.signed]);
+  const distribution = useMemo(() => valueDistribution(matrix, info.trivialCol), [matrix, info.trivialCol]);
   const tableMax = distribution.length ? distribution[distribution.length - 1][0] : 0;
   const atMax = distribution.length ? distribution[distribution.length - 1][1] : 0;
-  const strongest = useMemo(() => strongestCell(matrix, info.signed), [matrix, info.signed]);
+  const strongest = useMemo(() => strongestCell(matrix, info.trivialCol), [matrix, info.trivialCol]);
 
   const s = analysis.sbox;
   const size = 1 << s.n;
@@ -84,7 +84,7 @@ export default function Inspector({ analysis, table, selected, onSelect }) {
     <div className="btn-row insp-actions">
       <button onClick={() => onSelect(strongest)}>Strongest cell</button>
       {selected && selected.r > 0 && (
-        <button onClick={() => onSelect(strongestCell(matrix, info.signed, selected.r))}>Strongest in this row</button>
+        <button onClick={() => onSelect(strongestCell(matrix, info.trivialCol, selected.r))}>Strongest in this row</button>
       )}
     </div>
   );
@@ -103,9 +103,9 @@ export default function Inspector({ analysis, table, selected, onSelect }) {
 
   const { r: a, c: b } = selected;
   const v = get(matrix, a, b);
-  const trivial = isTrivial(a, b, info.signed);
-  const row = lineStats(matrix, info.signed, 'row', a);
-  const col = lineStats(matrix, info.signed, 'col', b);
+  const trivial = isTrivial(a, b, info.trivialCol);
+  const row = lineStats(matrix, info.trivialCol, 'row', a);
+  const col = lineStats(matrix, info.trivialCol, 'col', b);
   const [aName, bName] = [info.rows.replace(/ a$/, ''), info.cols.replace(/ b$/, '')];
 
   const coords = (

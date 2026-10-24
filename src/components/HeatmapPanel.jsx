@@ -20,7 +20,7 @@ export default function HeatmapPanel({ analysis, table, onTable, selected, onSel
 
   const info = TABLES[table];
   const matrix = /** @type {import('../core/matrix.js').Matrix} */ (analysis.tables[table]);
-  const { max, maxCount } = useMemo(() => tableStats(matrix, info.signed), [matrix, info.signed]);
+  const { max, maxCount } = useMemo(() => tableStats(matrix, info.trivialCol), [matrix, info.trivialCol]);
   const { n, m } = analysis.properties;
   const size = 1 << n;
   // Outlining hundreds of tied maxima turns into noise; only do it when it is informative.
@@ -84,6 +84,7 @@ export default function HeatmapPanel({ analysis, table, onTable, selected, onSel
           <Heatmap
             matrix={matrix}
             signed={info.signed}
+            trivialCol={info.trivialCol}
             max={max}
             logScale={logScale}
             outlineMax={outline}
