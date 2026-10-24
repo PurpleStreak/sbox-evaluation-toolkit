@@ -19,6 +19,9 @@ S-boxes, and for judging which classes of attack an S-box is weak against.
 - **Build S-boxes** — reference S-boxes (AES, PRESENT, GIFT, SKINNY, Serpent, PRINCE, Midori,
   DES), random permutations, power maps x^d over GF(2^n) with affine maps, a simulated-annealing
   search running in a Web Worker, or paste your own (hex, decimal, C arrays).
+- **Affine equivalence** — tests the S-box against every reference S-box of the same size
+  (Biryukov et al. 2003 algorithm) and shows the affine maps when it is a known S-box in
+  disguise; 4-bit optimal S-boxes are placed in their Leander–Poschmann class G0–G15.
 - **Experiment** — swap entries in the table editor or apply a random affine transform and
   watch which metrics change.
 - **Explain / Expert** modes and dark / light themes.
