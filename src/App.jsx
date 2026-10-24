@@ -77,7 +77,7 @@ export default function App() {
       />
       <VerdictRow analysis={current.analysis} />
       <main className="workbench">
-        <SourcePanel currentName={current.name} analysis={current.analysis} onLoad={load} onToast={showToast} />
+        <SourcePanel currentName={current.name} onLoad={load} onToast={showToast} />
         <HeatmapPanel
           analysis={current.analysis}
           table={table}

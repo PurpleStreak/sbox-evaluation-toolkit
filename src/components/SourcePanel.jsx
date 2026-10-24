@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import SearchPanel from './SearchPanel.jsx';
-import { AES_AFFINE, affineTransform, notableExponents, powerMap, randomAffineMap, randomPermutation } from '../core/generators.js';
-import { METRICS } from '../core/metrics.js';
+import { AES_AFFINE, notableExponents, powerMap, randomAffineMap, randomPermutation } from '../core/generators.js';
 import { PRESETS } from '../core/presets.js';
 import { randomSeed } from '../core/random.js';
 import { parseSBox } from '../core/sbox.js';
@@ -11,14 +10,13 @@ import { parseSBox } from '../core/sbox.js';
  */
 
 /**
- * Where S-boxes come from: reference S-boxes, generators, paste, and experiments.
+ * Where S-boxes come from: reference S-boxes, generators and paste.
  * @param {object} props
  * @param {string} props.currentName
- * @param {import('../core/analyze.js').Analysis} props.analysis
  * @param {LoadFn} props.onLoad
  * @param {(msg: string) => void} props.onToast
  */
-export default function SourcePanel({ currentName, analysis, onLoad, onToast }) {
+export default function SourcePanel({ currentName, onLoad, onToast }) {
   const [pmBits, setPmBits] = useState(8);
   const exponents = useMemo(() => notableExponents(pmBits), [pmBits]);
   const [pmExp, setPmExp] = useState(254);
@@ -28,7 +26,6 @@ export default function SourcePanel({ currentName, analysis, onLoad, onToast }) 
   const [pasteError, setPasteError] = useState('');
 
   const exponent = exponents.some((e) => e.exponent === pmExp) ? pmExp : exponents[0].exponent;
-  const baseName = currentName.replace(/ \((edited|affine)[^)]*\)$/, '');
 
   const buildPowerMap = () => {
     const seed = randomSeed();
@@ -37,25 +34,6 @@ export default function SourcePanel({ currentName, analysis, onLoad, onToast }) 
     const suffix = outputMap ? (pmOut === 'aes' ? ' + AES affine' : ` + affine #${seed.toString(16)}`) : '';
     onLoad(sbox, `x^${exponent} over GF(2^${pmBits})${suffix}`);
     if (!bijective) onToast(`x^${exponent} is not a permutation of GF(2^${pmBits}): gcd(${exponent}, ${(1 << pmBits) - 1}) ≠ 1.`);
-  };
-
-  const affineDemo = () => {
-    const s = analysis.sbox;
-    if (s.n !== s.m) {
-      onToast('The affine experiment needs an n→n S-box.');
-      return;
-    }
-    const seed = randomSeed();
-    const next = onLoad(affineTransform(s, randomAffineMap(s.n, seed), randomAffineMap(s.n, seed + 1)), `${baseName} (affine #${seed.toString(16)})`, {
-      related: true,
-    });
-    const changed = METRICS.filter((m) => m.get(next) !== m.get(analysis));
-    const brokeInvariant = changed.some((m) => m.affineInvariant);
-    onToast(
-      changed.length === 0
-        ? 'Affine re-encoding: no metric changed.'
-        : `Affine re-encoding changed ${changed.length} metric${changed.length > 1 ? 's' : ''}${brokeInvariant ? '' : ', none of them locked'}: ${changed.map((m) => m.label).join(', ')}.`,
-    );
   };
 
   const loadPaste = () => {
@@ -146,13 +124,6 @@ export default function SourcePanel({ currentName, analysis, onLoad, onToast }) 
         <div className="small err" role="alert">{pasteError}</div>
       </div>
 
-      <div className="group">
-        <span className="lbl">Experiments</span>
-        <button onClick={affineDemo}>Apply random affine transform</button>
-        <p className="explain-only small muted">
-          Re-encodes the S-box as B∘S∘A with random affine maps. Metrics marked with a lock cannot change; watch the others move.
-        </p>
-      </div>
     </aside>
   );
 }
