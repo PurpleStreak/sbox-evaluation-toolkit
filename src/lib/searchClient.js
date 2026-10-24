@@ -1,3 +1,6 @@
+// Inlined (bundled into this module and started from a Blob URL) so it also works when the
+// app is opened straight from disk as a single HTML file, where file:// workers are blocked.
+import SearchWorker from '../workers/search.worker.js?worker&inline';
 import { createSBox } from '../core/sbox.js';
 
 /**
@@ -16,7 +19,7 @@ import { createSBox } from '../core/sbox.js';
  * @returns {{ cancel: () => void }}
  */
 export function startSearch(options, onUpdate, onError) {
-  const worker = new Worker(new URL('../workers/search.worker.js', import.meta.url), { type: 'module' });
+  const worker = new SearchWorker();
   worker.onmessage = (e) => {
     const msg = e.data;
     if (msg.type === 'error') {

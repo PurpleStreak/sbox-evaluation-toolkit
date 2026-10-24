@@ -1,3 +1,7 @@
+// Inlined (bundled into this module and started from a Blob URL) so it also works when the
+// app is opened straight from disk as a single HTML file, where file:// workers are blocked.
+import EquivalenceWorker from '../workers/equivalence.worker.js?worker&inline';
+
 /**
  * @typedef {(
  *   { type: 'class', result: import('../core/equivalence.js').ClassResult } |
@@ -16,7 +20,7 @@
  * @returns {{ cancel: () => void }}  Cancelling terminates the worker immediately.
  */
 export function runEquivalence(sbox, candidates, onEvent) {
-  const worker = new Worker(new URL('../workers/equivalence.worker.js', import.meta.url), { type: 'module' });
+  const worker = new EquivalenceWorker();
   worker.onmessage = (e) => {
     onEvent(e.data);
     if (e.data.type === 'done' || e.data.type === 'error') worker.terminate();

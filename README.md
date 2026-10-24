@@ -28,6 +28,12 @@ S-boxes, and for judging which classes of attack an S-box is weak against.
 
 Everything runs in the browser; there is no server.
 
+## Offline single-file version
+
+`npm run build:single` writes `dist-single/index.html` (~320 KB): the complete app — code,
+styles, data and both Web Workers — in one file. Copy it anywhere and open it by
+double-clicking; it needs no internet connection, server or installation.
+
 ## Status
 
 Work in progress.
@@ -42,6 +48,7 @@ npm run dev        # start the dev server at http://localhost:5173
 npm test           # run the unit tests
 npm run typecheck  # type-check JSDoc annotations
 npm run build      # production build into dist/
+npm run build:single # whole app in one offline file: dist-single/index.html
 npm run precompute # regenerate src/data/*.json (presets + random baseline, ~1.5 min)
 ```
 
