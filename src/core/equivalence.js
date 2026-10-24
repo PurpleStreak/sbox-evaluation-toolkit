@@ -1,9 +1,10 @@
 import { algebraicDegrees, quadraticEquations } from './algebraic.js';
 import { dlct } from './connectivity.js';
+import { applyAffine } from './generators.js';
 import { ddt, differentialSpectrum } from './differential.js';
 import { walsh, walshSpectrum } from './linear.js';
 import { spectrum } from './matrix.js';
-import { createSBox, isBijective } from './sbox.js';
+import { createSBox, inverse, isBijective } from './sbox.js';
 
 /**
  * Affine equivalence of S-boxes.
@@ -20,6 +21,10 @@ import { createSBox, isBijective } from './sbox.js';
  *     (inconsistent or non-injective maps) prune the guess; otherwise guess again.
  *  3. Affine equivalence: with S₁ₐ(x) = S₁(x ⊕ a) ⊕ S₁(a) and S₂'(x) = S₂(x) ⊕ S₂(0), the
  *     S-boxes are affine equivalent iff S₂' is linearly equivalent to S₁ₐ for some a.
+ *     Since S₂ = B∘S₁∘A ⇔ S₂⁻¹ = A⁻¹∘S₁⁻¹∘B⁻¹, the constant can be searched on the input
+ *     side or (through the inverses) on the output side. Often only one specific constant
+ *     works on one side but every constant works on the other (e.g. AES vs its inverse), so
+ *     both sides are tried alternately.
  */
 
 /**
@@ -213,30 +218,48 @@ export function affineEquivalence(s1, s2, opts = {}) {
   }
 
   const N = 1 << s1.n;
-  const t1 = s1.table;
-  const t2 = s2.table;
-  const n2 = Uint8Array.from(t2, (y) => y ^ t2[0]); // S₂'(x) = S₂(x) ⊕ S₂(0)
-  const shifted = new Uint8Array(N);
   const stop = opts.shouldStop ?? (() => false);
+  const sides = [
+    { t1: s1.table, t2: s2.table, inverted: false },
+    { t1: inverse(s1).table, t2: inverse(s2).table, inverted: true },
+  ].map((side) => ({ ...side, n2: Uint8Array.from(side.t2, (y) => y ^ side.t2[0]) })); // S₂'(x) = S₂(x) ⊕ S₂(0)
+  const shifted = new Uint8Array(N);
+
   for (let a = 0; a < N; a++) {
-    if (stop()) return { status: 'cancelled' };
-    for (let x = 0; x < N; x++) shifted[x] = t1[x ^ a] ^ t1[a]; // S₁ₐ
-    const sol = linearEquivalence(shifted, n2, { shouldStop: stop });
-    opts.onProgress?.(a + 1, N);
-    if (sol) {
-      const LA = tableToMatrix(sol.A, s1.n);
-      const LB = tableToMatrix(sol.B, s1.n);
-      // s2(x) = LB · s1(LA·x ⊕ a) ⊕ (LB · s1(a) ⊕ s2(0))
-      return {
-        status: 'equivalent',
-        A: { matrix: LA, constant: a },
-        B: { matrix: LB, constant: sol.B[t1[a]] ^ t2[0] },
-        constantsTried: a + 1,
-      };
+    for (const side of sides) {
+      if (stop()) return { status: 'cancelled' };
+      const { t1, t2, n2 } = side;
+      for (let x = 0; x < N; x++) shifted[x] = t1[x ^ a] ^ t1[a]; // S₁ₐ
+      const sol = linearEquivalence(shifted, n2, { shouldStop: stop });
+      if (!sol) continue;
+      // t2(x) = LB · t1(LA·x ⊕ a) ⊕ (LB · t1(a) ⊕ t2(0))
+      /** @type {AffineMap} */
+      const A = { matrix: tableToMatrix(sol.A, s1.n), constant: a };
+      /** @type {AffineMap} */
+      const B = { matrix: tableToMatrix(sol.B, s1.n), constant: sol.B[t1[a]] ^ t2[0] };
+      // On the inverted side we found S₂⁻¹ = B∘S₁⁻¹∘A, i.e. S₂ = A⁻¹∘S₁∘B⁻¹.
+      return side.inverted
+        ? { status: 'equivalent', A: invertAffine(B, s1.n), B: invertAffine(A, s1.n), constantsTried: 2 * a + 2 }
+        : { status: 'equivalent', A, B, constantsTried: 2 * a + 1 };
     }
+    opts.onProgress?.(a + 1, N);
   }
   if (stop()) return { status: 'cancelled' };
   return { status: 'not-equivalent', reason: 'exhaustive search found no affine maps', invariant: null };
+}
+
+/**
+ * Inverse of an affine bijection.
+ * @param {AffineMap} map
+ * @param {number} n
+ * @returns {AffineMap}
+ */
+export function invertAffine(map, n) {
+  const N = 1 << n;
+  const inv = new Int16Array(N);
+  for (let x = 0; x < N; x++) inv[applyAffine(map, x)] = x;
+  const c = inv[0];
+  return { matrix: tableToMatrix(Int16Array.from(inv, (v) => v ^ c), n), constant: c };
 }
 
 /* ------------------------------------------------------------------ */

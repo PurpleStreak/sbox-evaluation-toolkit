@@ -45,6 +45,10 @@ describe('affine equivalence', () => {
     const inv = powerMap({ n: 8, exponent: 254 }).sbox;
     expectMaps(inv, aes, affineEquivalence(inv, aes));
     expectMaps(aes, preset('aes-inv'), affineEquivalence(aes, preset('aes-inv')));
+    // Searching constants on both sides keeps the hard direction fast too.
+    const back = affineEquivalence(preset('aes-inv'), aes);
+    expectMaps(preset('aes-inv'), aes, back);
+    expect(back.status === 'equivalent' && back.constantsTried).toBeLessThanOrEqual(4);
     const disguised = affineTransform(aes, randomAffineMap(8, 1), randomAffineMap(8, 2));
     expectMaps(aes, disguised, affineEquivalence(aes, disguised));
   });
