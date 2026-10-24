@@ -23,8 +23,8 @@ S-boxes, and for judging which classes of attack an S-box is weak against.
   (Biryukov et al. 2003 algorithm) and shows the affine maps when it is a known S-box in
   disguise; 4-bit optimal S-boxes are placed in their Leander–Poschmann class G0–G15.
 - **S-box table** — the lookup table itself, with fixed points marked.
-- **Advanced** (collapsed by default) — simulated-annealing search for strong S-boxes,
-  running in a Web Worker with live progress.
+- **Advanced** (in the source panel, collapsed by default) — simulated-annealing search for
+  strong S-boxes, running in a Web Worker with live progress.
 
 Everything runs in the browser; there is no server.
 

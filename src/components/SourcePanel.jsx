@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import SearchPanel from './SearchPanel.jsx';
 import { randomPermutation } from '../core/generators.js';
 import { PRESETS } from '../core/presets.js';
 import { randomSeed } from '../core/random.js';
@@ -9,7 +10,8 @@ import { parseSBox } from '../core/sbox.js';
  */
 
 /**
- * Where S-boxes come from: reference S-boxes, random permutations and paste.
+ * Where S-boxes come from: reference S-boxes, random permutations, paste and, under
+ * Advanced (collapsed by default), the heuristic search.
  * @param {object} props
  * @param {string} props.currentName
  * @param {LoadFn} props.onLoad
@@ -68,6 +70,12 @@ export default function SourcePanel({ currentName, onLoad }) {
         </div>
         <div className="small err" role="alert">{pasteError}</div>
       </div>
+
+      {/* Collapsed by default; content stays mounted, so a running search continues when closed. */}
+      <details className="advanced">
+        <summary className="lbl">Advanced</summary>
+        <SearchPanel onLoad={onLoad} />
+      </details>
 
     </aside>
   );
