@@ -7,9 +7,8 @@ import { startSearch } from '../lib/searchClient.js';
  * Heuristic (simulated-annealing) search running in a Web Worker, with live progress.
  * @param {object} props
  * @param {(sbox: import('../core/sbox.js').SBox, name: string, opts?: { related?: boolean }) => unknown} props.onLoad
- * @param {(msg: string) => void} props.onToast
  */
-export default function SearchPanel({ onLoad, onToast }) {
+export default function SearchPanel({ onLoad }) {
   const [n, setN] = useState(8);
   const [iterations, setIterations] = useState(20000);
   const [running, setRunning] = useState(false);
@@ -44,7 +43,6 @@ export default function SearchPanel({ onLoad, onToast }) {
         if (done) {
           setRunning(false);
           handle.current = null;
-          if (!cancelled) onToast(`Search finished: NL ${stats.best.nonlinearity}, δ ${stats.best.uniformity} after ${stats.iteration.toLocaleString('en-US')} moves.`);
         }
       },
       (message) => {
@@ -55,47 +53,53 @@ export default function SearchPanel({ onLoad, onToast }) {
   };
 
   return (
-    <div className="group">
-      <span className="lbl">
-        Heuristic search <span className="chip warn">heavy</span>
-      </span>
-      <p className="explain-only small muted">
-        Simulated annealing swaps entries of a random permutation to raise nonlinearity and lower δ. Runs in the background; the
-        best S-box so far is shown live.
-      </p>
-      <div className="inline-fields">
-        <label className="lbl small">
-          bits
-          <select value={n} onChange={(e) => setN(Number(e.target.value))} disabled={running}>
-            {[4, 5, 6, 7, 8].map((v) => (
-              <option key={v} value={v}>{v}</option>
-            ))}
-          </select>
-        </label>
-        <label className="lbl small">
-          moves
-          <select value={iterations} onChange={(e) => setIterations(Number(e.target.value))} disabled={running}>
-            {[5000, 20000, 50000].map((v) => (
-              <option key={v} value={v}>{v.toLocaleString('en-US')}</option>
-            ))}
-          </select>
-        </label>
+    <div className="search">
+      <div className="search-controls">
+        <h3>
+          Heuristic search <span className="chip warn">heavy</span>
+        </h3>
+        <p className="small muted">
+          Simulated annealing swaps entries of a random permutation to raise nonlinearity and lower δ. It runs in the background,
+          and the best S-box so far is loaded into the toolkit as it improves.
+        </p>
+        <div className="inline-fields">
+          <label className="lbl small">
+            bits
+            <select value={n} onChange={(e) => setN(Number(e.target.value))} disabled={running}>
+              {[4, 5, 6, 7, 8].map((v) => (
+                <option key={v} value={v}>{v}</option>
+              ))}
+            </select>
+          </label>
+          <label className="lbl small">
+            moves
+            <select value={iterations} onChange={(e) => setIterations(Number(e.target.value))} disabled={running}>
+              {[5000, 20000, 50000].map((v) => (
+                <option key={v} value={v}>{v.toLocaleString('en-US')}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="btn-row">
+          <button className="primary" onClick={run} disabled={running}>
+            Run search
+          </button>
+          <button onClick={() => handle.current?.cancel()} disabled={!running}>
+            Cancel
+          </button>
+        </div>
+        <div className="small muted" aria-live="polite">{status}</div>
       </div>
-      <div className="btn-row">
-        <button className="primary" onClick={run} disabled={running}>
-          Run search
-        </button>
-        <button onClick={() => handle.current?.cancel()} disabled={!running}>
-          Cancel
-        </button>
+      <div className="search-charts">
+        {history.length > 0 ? (
+          <>
+            <Sparkline values={history.map((h) => h.nl)} label="NL ↑" />
+            <Sparkline values={history.map((h) => h.du)} label="δ ↓" lowerIsBetter />
+          </>
+        ) : (
+          <p className="small muted">Progress charts for nonlinearity and δ appear here while a search runs.</p>
+        )}
       </div>
-      <div className="small muted" aria-live="polite">{status}</div>
-      {history.length > 0 && (
-        <>
-          <Sparkline values={history.map((h) => h.nl)} label="NL ↑" />
-          <Sparkline values={history.map((h) => h.du)} label="δ ↓" lowerIsBetter />
-        </>
-      )}
     </div>
   );
 }

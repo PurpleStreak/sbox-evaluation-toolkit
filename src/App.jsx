@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
+import AdvancedSection from './components/AdvancedSection.jsx';
 import EquivalencePanel from './components/EquivalencePanel.jsx';
 import HeatmapPanel from './components/HeatmapPanel.jsx';
 import Inspector from './components/Inspector.jsx';
 import MetricStrips from './components/MetricStrips.jsx';
 import SboxTable from './components/SboxTable.jsx';
 import SourcePanel from './components/SourcePanel.jsx';
-import Toast from './components/Toast.jsx';
 import TopBar from './components/TopBar.jsx';
 import VerdictRow from './components/VerdictRow.jsx';
 import { analyze } from './core/analyze.js';
@@ -35,9 +35,6 @@ export default function App() {
   );
   const [mode, setMode] = usePersistentState('sbox.mode', /** @type {'explain' | 'expert'} */ ('explain'));
   const [theme, setTheme] = usePersistentState('sbox.theme', /** @type {'dark' | 'light'} */ ('dark'));
-  const [toast, setToast] = useState(/** @type {{ id: number, text: string } | null} */ (null));
-  const showToast = useCallback((/** @type {string} */ text) => setToast({ id: Date.now(), text }), []);
-  const clearToast = useCallback(() => setToast(null), []);
 
   // Apply the theme during render (not in an effect): child canvases read the CSS colour
   // variables in their own effects, which run before a parent's effect would.
@@ -77,7 +74,7 @@ export default function App() {
       />
       <VerdictRow analysis={current.analysis} />
       <main className="workbench">
-        <SourcePanel currentName={current.name} onLoad={load} onToast={showToast} />
+        <SourcePanel currentName={current.name} onLoad={load} />
         <HeatmapPanel
           analysis={current.analysis}
           table={table}
@@ -97,7 +94,7 @@ export default function App() {
       </main>
       <EquivalencePanel sbox={current.sbox} name={current.name} />
       <SboxTable sbox={current.sbox} />
-      <Toast toast={toast} onDone={clearToast} />
+      <AdvancedSection onLoad={load} />
       <footer className="foot small muted">
         S-Box Evaluation Toolkit · B P Pranavan Paramesh (MIS 222515010) · guided by Dr. Mahesh Joshi · Dept. of CSE, IIIT Pune
       </footer>

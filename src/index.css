@@ -173,11 +173,6 @@ canvas.heatmap:focus-visible { outline: 2px solid var(--accent); outline-offset:
 .inline-fields > .lbl.grow { flex: 1; min-width: 0; }
 .spark { width: 100%; height: 60px; background: var(--surface); border-radius: 8px; display: block; }
 
-/* Toast */
-.toast-host { position: fixed; right: 20px; bottom: 20px; z-index: 30; max-width: min(460px, calc(100vw - 32px)); }
-.toast { background: var(--panel); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 14px; font-size: 13px; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4); cursor: pointer; animation: rise 0.2s ease-out; }
-@keyframes rise { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
-
 /* S-box table */
 .sbox-table { margin: 0 24px 14px; }
 .grid { display: grid; gap: 2px; font-family: ui-monospace, monospace; font-size: 12px; max-width: 760px; }
@@ -199,3 +194,17 @@ canvas.heatmap:focus-visible { outline: 2px solid var(--accent); outline-offset:
 .maps { display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
 .map-view pre { margin: 2px 0 0; font-size: 11px; line-height: 1.25; color: var(--text-2); }
 @media (max-width: 640px) { .equivalence { margin: 0 16px 14px; } }
+
+/* Advanced section (collapsible) */
+.advanced { margin: 0 24px 14px; padding: 0; }
+.advanced summary { display: flex; align-items: baseline; gap: 14px; padding: 14px; cursor: pointer; list-style: none; }
+.advanced summary::-webkit-details-marker { display: none; }
+.advanced summary::before { content: '▸'; color: var(--accent); transition: transform 0.15s; display: inline-block; }
+.advanced[open] summary::before { transform: rotate(90deg); }
+.advanced summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 14px; }
+.search { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 24px; padding: 0 14px 14px; }
+.search-controls { display: flex; flex-direction: column; gap: 8px; }
+.search-controls h3 { margin: 0; }
+.search-charts { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+@media (max-width: 800px) { .search { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .advanced { margin: 0 16px 14px; } }

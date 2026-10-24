@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import SearchPanel from './SearchPanel.jsx';
 import { randomPermutation } from '../core/generators.js';
 import { PRESETS } from '../core/presets.js';
 import { randomSeed } from '../core/random.js';
@@ -14,9 +13,8 @@ import { parseSBox } from '../core/sbox.js';
  * @param {object} props
  * @param {string} props.currentName
  * @param {LoadFn} props.onLoad
- * @param {(msg: string) => void} props.onToast
  */
-export default function SourcePanel({ currentName, onLoad, onToast }) {
+export default function SourcePanel({ currentName, onLoad }) {
   const [paste, setPaste] = useState('');
   const [pasteFormat, setPasteFormat] = useState(/** @type {'auto' | 'hex' | 'dec'} */ ('auto'));
   const [pasteError, setPasteError] = useState('');
@@ -56,8 +54,6 @@ export default function SourcePanel({ currentName, onLoad, onToast }) {
           </button>
         </div>
       </div>
-
-      <SearchPanel onLoad={onLoad} onToast={onToast} />
 
       <div className="group">
         <label className="lbl" htmlFor="paste">Paste</label>
