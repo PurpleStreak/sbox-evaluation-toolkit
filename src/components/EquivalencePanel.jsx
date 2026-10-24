@@ -101,8 +101,8 @@ export default function EquivalencePanel({ sbox, name }) {
       </div>
       <p className="small muted">
         Two S-boxes are affine equivalent when one is the other with affine re-encodings of its input and output (S₂ = B∘S₁∘A).
-        They then share every property marked with a lock, so a &ldquo;new&rdquo; S-box that is equivalent to a known one is that
-        S-box in disguise. Checked with the Biryukov et al. (2003) algorithm; when equivalent, the maps A and B are found and verified.
+        They then share δ, NL, β, the algebraic degree and the table value distributions, so a &ldquo;new&rdquo; S-box that is
+        equivalent to a known one is that S-box in disguise. Checked with the Biryukov et al. (2003) algorithm; when equivalent, the maps A and B are found and verified.
       </p>
 
       {!applicable ? (

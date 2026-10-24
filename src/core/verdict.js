@@ -41,7 +41,7 @@ const pct = (x) => `${Math.round(x * 100)}%`;
  * @param {import('./baseline.js').BaselineComparison} cmp
  * @returns {string}
  */
-export function beatsText(cmp) {
+function beatsText(cmp) {
   if (cmp.betterThan === 1) return `better than all ${cmp.samples.toLocaleString('en-US')} random`;
   return `better than ${cmp.betterThan > 0.99 ? (cmp.betterThan * 100).toFixed(1) + '%' : pct(cmp.betterThan)} of random`;
 }

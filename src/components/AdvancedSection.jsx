@@ -4,7 +4,7 @@ import SearchPanel from './SearchPanel.jsx';
  * Collapsible section for heavier, optional tools. Collapsed by default to keep the main
  * view focused; the content stays mounted while closed, so a running search continues.
  * @param {object} props
- * @param {(sbox: import('../core/sbox.js').SBox, name: string, opts?: { related?: boolean }) => unknown} props.onLoad
+ * @param {(sbox: import('../core/sbox.js').SBox, name: string, opts?: { keepView?: boolean }) => unknown} props.onLoad
  */
 export default function AdvancedSection({ onLoad }) {
   return (

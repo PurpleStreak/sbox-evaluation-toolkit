@@ -67,13 +67,87 @@ export function tableStats(m, signed) {
 }
 
 /**
+ * True for the trivial row 0 and, in signed tables, the trivial column 0.
+ * @param {number} r
+ * @param {number} c
+ * @param {boolean} signed
+ */
+export function isTrivial(r, c, signed) {
+  return r === 0 || (signed && c === 0);
+}
+
+/**
+ * First non-trivial cell with the largest |entry|, optionally restricted to one row.
+ * @param {import('../core/matrix.js').Matrix} m
+ * @param {boolean} signed
+ * @param {number} [row]
+ * @returns {{ r: number, c: number }}
+ */
+export function strongestCell(m, signed, row) {
+  let best = { r: row ?? 1, c: signed ? 1 : 0 };
+  let max = -1;
+  const rows = row === undefined ? Array.from({ length: m.rows - 1 }, (_, i) => i + 1) : [row];
+  for (const r of rows) {
+    for (let c = 0; c < m.cols; c++) {
+      if (isTrivial(r, c, signed)) continue;
+      const v = Math.abs(get(m, r, c));
+      if (v > max) {
+        max = v;
+        best = { r, c };
+      }
+    }
+  }
+  return best;
+}
+
+/**
  * First cell holding the largest non-trivial DDT entry — a sensible default selection.
  * @param {import('../core/analyze.js').Analysis} a
  * @returns {{ r: number, c: number }}
  */
 export function strongestDdtCell(a) {
-  const m = a.tables.ddt;
-  const { max } = tableStats(m, false);
-  for (let r = 1; r < m.rows; r++) for (let c = 0; c < m.cols; c++) if (get(m, r, c) === max) return { r, c };
-  return { r: 1, c: 0 };
+  return strongestCell(a.tables.ddt, false);
+}
+
+/**
+ * Largest non-trivial |entry| and the number of non-zero non-trivial entries in one row or column.
+ * @param {import('../core/matrix.js').Matrix} m
+ * @param {boolean} signed
+ * @param {'row' | 'col'} axis
+ * @param {number} index
+ * @returns {{ max: number, nonZero: number, cells: number }}
+ */
+export function lineStats(m, signed, axis, index) {
+  let max = 0;
+  let nonZero = 0;
+  let cells = 0;
+  const len = axis === 'row' ? m.cols : m.rows;
+  for (let k = 0; k < len; k++) {
+    const r = axis === 'row' ? index : k;
+    const c = axis === 'row' ? k : index;
+    if (isTrivial(r, c, signed)) continue;
+    const v = Math.abs(get(m, r, c));
+    cells++;
+    if (v) nonZero++;
+    if (v > max) max = v;
+  }
+  return { max, nonZero, cells };
+}
+
+/**
+ * Histogram of non-trivial |entries| as [value, count] pairs, ascending.
+ * @param {import('../core/matrix.js').Matrix} m
+ * @param {boolean} signed
+ * @returns {[number, number][]}
+ */
+export function valueDistribution(m, signed) {
+  /** @type {Map<number, number>} */
+  const counts = new Map();
+  for (let r = 1; r < m.rows; r++) {
+    for (let c = signed ? 1 : 0; c < m.cols; c++) {
+      const v = Math.abs(get(m, r, c));
+      counts.set(v, (counts.get(v) ?? 0) + 1);
+    }
+  }
+  return [...counts].sort((x, y) => x[0] - y[0]);
 }

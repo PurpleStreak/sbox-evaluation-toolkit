@@ -6,7 +6,7 @@ import { startSearch } from '../lib/searchClient.js';
 /**
  * Heuristic (simulated-annealing) search running in a Web Worker, with live progress.
  * @param {object} props
- * @param {(sbox: import('../core/sbox.js').SBox, name: string, opts?: { related?: boolean }) => unknown} props.onLoad
+ * @param {(sbox: import('../core/sbox.js').SBox, name: string, opts?: { keepView?: boolean }) => unknown} props.onLoad
  */
 export default function SearchPanel({ onLoad }) {
   const [n, setN] = useState(8);
@@ -37,7 +37,7 @@ export default function SearchPanel({ onLoad }) {
         const now = performance.now();
         if (done || now - lastLoad > 700) {
           lastLoad = now;
-          onLoad(best, name, { related: !first });
+          onLoad(best, name, { keepView: !first });
           first = false;
         }
         if (done) {

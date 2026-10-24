@@ -5,7 +5,7 @@ import { randomSeed } from '../core/random.js';
 import { parseSBox } from '../core/sbox.js';
 
 /**
- * @typedef {(sbox: import('../core/sbox.js').SBox, name: string, opts?: { related?: boolean }) => import('../core/analyze.js').Analysis} LoadFn
+ * @typedef {(sbox: import('../core/sbox.js').SBox, name: string, opts?: { keepView?: boolean }) => import('../core/analyze.js').Analysis} LoadFn
  */
 
 /**
