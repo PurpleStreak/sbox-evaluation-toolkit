@@ -55,9 +55,9 @@ export default function SearchPanel({ onLoad }) {
   return (
     <div className="search">
       <div className="search-controls">
-        <h3>
+        <span className="lbl">
           Heuristic search <span className="chip warn">heavy</span>
-        </h3>
+        </span>
         <p className="small muted">
           Simulated annealing swaps entries of a random permutation to raise nonlinearity and lower δ. It runs in the background,
           and the best S-box so far is loaded into the toolkit as it improves.

@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import AdvancedSection from './components/AdvancedSection.jsx';
 import EquivalencePanel from './components/EquivalencePanel.jsx';
 import HeatmapPanel from './components/HeatmapPanel.jsx';
 import Inspector from './components/Inspector.jsx';
@@ -75,7 +74,6 @@ export default function App() {
       </main>
       <EquivalencePanel sbox={current.sbox} name={current.name} />
       <SboxTable sbox={current.sbox} />
-      <AdvancedSection onLoad={load} />
       <footer className="foot small muted">
         S-Box Evaluation Toolkit · B P Pranavan Paramesh (MIS 222515010) · guided by Dr. Mahesh Joshi · Dept. of CSE, IIIT Pune
       </footer>
