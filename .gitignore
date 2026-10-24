@@ -20,3 +20,7 @@ Thumbs.db
 # Env
 .env
 .env.*
+
+# Presentation (kept out of the repository) and Windows download markers
+*.pptx
+*:Zone.Identifier
