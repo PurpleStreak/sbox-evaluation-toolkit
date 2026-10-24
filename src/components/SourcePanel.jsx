@@ -1,62 +1,23 @@
-import { useMemo, useState } from 'react';
-import SearchPanel from './SearchPanel.jsx';
-import { AES_AFFINE, affineTransform, notableExponents, powerMap, randomAffineMap, randomPermutation } from '../core/generators.js';
-import { METRICS } from '../core/metrics.js';
+import { useState } from 'react';
+import { randomPermutation } from '../core/generators.js';
 import { PRESETS } from '../core/presets.js';
 import { randomSeed } from '../core/random.js';
 import { parseSBox } from '../core/sbox.js';
 
 /**
- * @typedef {(sbox: import('../core/sbox.js').SBox, name: string, opts?: { related?: boolean }) => import('../core/analyze.js').Analysis} LoadFn
+ * @typedef {(sbox: import('../core/sbox.js').SBox, name: string, opts?: { keepView?: boolean }) => import('../core/analyze.js').Analysis} LoadFn
  */
 
 /**
- * Where S-boxes come from: reference S-boxes, generators, paste, and experiments.
+ * Where S-boxes come from: reference S-boxes, random permutations and paste.
  * @param {object} props
  * @param {string} props.currentName
- * @param {import('../core/analyze.js').Analysis} props.analysis
  * @param {LoadFn} props.onLoad
- * @param {(msg: string) => void} props.onToast
  */
-export default function SourcePanel({ currentName, analysis, onLoad, onToast }) {
-  const [pmBits, setPmBits] = useState(8);
-  const exponents = useMemo(() => notableExponents(pmBits), [pmBits]);
-  const [pmExp, setPmExp] = useState(254);
-  const [pmOut, setPmOut] = useState(/** @type {'aes' | 'none' | 'random'} */ ('aes'));
+export default function SourcePanel({ currentName, onLoad }) {
   const [paste, setPaste] = useState('');
   const [pasteFormat, setPasteFormat] = useState(/** @type {'auto' | 'hex' | 'dec'} */ ('auto'));
   const [pasteError, setPasteError] = useState('');
-
-  const exponent = exponents.some((e) => e.exponent === pmExp) ? pmExp : exponents[0].exponent;
-  const baseName = currentName.replace(/ \((edited|affine)[^)]*\)$/, '');
-
-  const buildPowerMap = () => {
-    const seed = randomSeed();
-    const outputMap = pmOut === 'aes' && pmBits === 8 ? AES_AFFINE : pmOut === 'random' ? randomAffineMap(pmBits, seed) : undefined;
-    const { sbox, bijective } = powerMap({ n: pmBits, exponent, outputMap });
-    const suffix = outputMap ? (pmOut === 'aes' ? ' + AES affine' : ` + affine #${seed.toString(16)}`) : '';
-    onLoad(sbox, `x^${exponent} over GF(2^${pmBits})${suffix}`);
-    if (!bijective) onToast(`x^${exponent} is not a permutation of GF(2^${pmBits}): gcd(${exponent}, ${(1 << pmBits) - 1}) ≠ 1.`);
-  };
-
-  const affineDemo = () => {
-    const s = analysis.sbox;
-    if (s.n !== s.m) {
-      onToast('The affine experiment needs an n→n S-box.');
-      return;
-    }
-    const seed = randomSeed();
-    const next = onLoad(affineTransform(s, randomAffineMap(s.n, seed), randomAffineMap(s.n, seed + 1)), `${baseName} (affine #${seed.toString(16)})`, {
-      related: true,
-    });
-    const changed = METRICS.filter((m) => m.get(next) !== m.get(analysis));
-    const brokeInvariant = changed.some((m) => m.affineInvariant);
-    onToast(
-      changed.length === 0
-        ? 'Affine re-encoding: no metric changed.'
-        : `Affine re-encoding changed ${changed.length} metric${changed.length > 1 ? 's' : ''}${brokeInvariant ? '' : ', none of them locked'}: ${changed.map((m) => m.label).join(', ')}.`,
-    );
-  };
 
   const loadPaste = () => {
     try {
@@ -83,54 +44,16 @@ export default function SourcePanel({ currentName, analysis, onLoad, onToast }) 
       </div>
 
       <div className="group">
-        <span className="lbl">Generate</span>
+        <span className="lbl">Random permutation</span>
         <div className="btn-col">
           <button onClick={() => { const s = randomSeed(); onLoad(randomPermutation(8, s), `Random 8-bit #${s.toString(16)}`); }}>
-            Random 8-bit permutation
+            Random 8-bit
           </button>
           <button onClick={() => { const s = randomSeed(); onLoad(randomPermutation(4, s), `Random 4-bit #${s.toString(16)}`); }}>
-            Random 4-bit permutation
+            Random 4-bit
           </button>
         </div>
-        <div className="power">
-          <span className="lbl small">
-            <span>
-              Power map S(x) = A(x<sup>d</sup>) over GF(2ⁿ)
-            </span>
-          </span>
-          <div className="inline-fields">
-            <label className="lbl small">
-              bits
-              <select value={pmBits} onChange={(e) => setPmBits(Number(e.target.value))}>
-                {[3, 4, 5, 6, 7, 8].map((v) => (
-                  <option key={v} value={v}>{v}</option>
-                ))}
-              </select>
-            </label>
-            <label className="lbl small grow">
-              exponent d
-              <select value={exponent} onChange={(e) => setPmExp(Number(e.target.value))}>
-                {exponents.map((e) => (
-                  <option key={e.exponent} value={e.exponent} title={e.note}>
-                    {e.name} — d = {e.exponent}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <label className="lbl small">
-            output map A
-            <select value={pmOut} onChange={(e) => setPmOut(/** @type {'aes' | 'none' | 'random'} */ (e.target.value))}>
-              <option value="aes" disabled={pmBits !== 8}>AES affine map (8-bit)</option>
-              <option value="none">none</option>
-              <option value="random">random affine map</option>
-            </select>
-          </label>
-          <button onClick={buildPowerMap}>Build power map</button>
-        </div>
       </div>
-
-      <SearchPanel onLoad={onLoad} onToast={onToast} />
 
       <div className="group">
         <label className="lbl" htmlFor="paste">Paste</label>
@@ -146,13 +69,6 @@ export default function SourcePanel({ currentName, analysis, onLoad, onToast }) 
         <div className="small err" role="alert">{pasteError}</div>
       </div>
 
-      <div className="group">
-        <span className="lbl">Experiments</span>
-        <button onClick={affineDemo}>Apply random affine transform</button>
-        <p className="explain-only small muted">
-          Re-encodes the S-box as B∘S∘A with random affine maps. Metrics marked with a lock cannot change; watch the others move.
-        </p>
-      </div>
     </aside>
   );
 }

@@ -13,18 +13,18 @@ S-boxes, and for judging which classes of attack an S-box is weak against.
   boomerang, differential-linear, algebraic, structural, avalanche), graded against the
   best known values and 10,000 random permutations of the same size.
 - **Interactive tables** — DDT, LAT, BCT and DLCT as heatmaps; hover to read, click (or use
-  the arrow keys) to have a cell explained, e.g. the concrete input pairs behind a DDT entry.
-- **Metrics vs random** — each metric drawn against the distribution of random permutations,
-  with AES/PRESENT as a reference and affine-invariant metrics marked.
-- **Build S-boxes** — reference S-boxes (AES, PRESENT, GIFT, SKINNY, Serpent, PRINCE, Midori,
-  DES), random permutations, power maps x^d over GF(2^n) with affine maps, a simulated-annealing
-  search running in a Web Worker, or paste your own (hex, decimal, C arrays).
+  the arrow keys) to select a cell.
+- **Inspector** — explains the selected cell in detail: coordinates, probability / bias /
+  correlation, the concrete input pairs behind a DDT entry, what it gives an attacker, how it
+  compares with its row, column and table, plus jumps to the strongest cells.
+- **Load S-boxes** — reference S-boxes (AES, PRESENT, GIFT, SKINNY, Serpent, PRINCE, Midori,
+  DES), random 8- or 4-bit permutations, or paste your own (hex, decimal, C arrays).
 - **Affine equivalence** — tests the S-box against every reference S-box of the same size
   (Biryukov et al. 2003 algorithm) and shows the affine maps when it is a known S-box in
   disguise; 4-bit optimal S-boxes are placed in their Leander–Poschmann class G0–G15.
-- **Experiment** — swap entries in the table editor or apply a random affine transform and
-  watch which metrics change.
-- **Explain / Expert** modes and dark / light themes.
+- **S-box table** — the lookup table itself, with fixed points marked.
+- **Advanced** (collapsed by default) — simulated-annealing search for strong S-boxes,
+  running in a Web Worker with live progress.
 
 Everything runs in the browser; there is no server.
 
