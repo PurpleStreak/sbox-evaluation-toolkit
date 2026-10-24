@@ -57,23 +57,25 @@ export default function App() {
       <VerdictRow analysis={current.analysis} />
       <main className="workbench">
         <SourcePanel currentName={current.name} onLoad={load} />
-        <HeatmapPanel
-          analysis={current.analysis}
-          table={table}
-          onTable={(t) => {
-            setTable(t);
-            setSelected(null);
-          }}
-          selected={selected}
-          onSelect={setSelected}
-        />
+        <div className="center-col">
+          <HeatmapPanel
+            analysis={current.analysis}
+            table={table}
+            onTable={(t) => {
+              setTable(t);
+              setSelected(null);
+            }}
+            selected={selected}
+            onSelect={setSelected}
+          />
+          <SboxTable sbox={current.sbox} />
+        </div>
         <aside className="panel inspector">
           <h3>Inspector</h3>
           <Inspector analysis={current.analysis} table={table} selected={selected} onSelect={setSelected} />
         </aside>
       </main>
       <EquivalencePanel sbox={current.sbox} name={current.name} />
-      <SboxTable sbox={current.sbox} />
       <footer className="foot small muted">
         S-Box Evaluation Toolkit · B P Pranavan Paramesh (MIS 222515010) · guided by Dr. Mahesh Joshi · Dept. of CSE, IIIT Pune
       </footer>

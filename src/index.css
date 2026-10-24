@@ -137,11 +137,11 @@ canvas.heatmap:focus-visible { outline: 2px solid var(--accent); outline-offset:
 .spark { width: 100%; height: 60px; background: var(--surface); border-radius: 8px; display: block; }
 
 /* S-box table */
-.sbox-table { margin: 0 24px 14px; }
-.grid { display: grid; gap: 2px; font-family: ui-monospace, monospace; font-size: 12px; max-width: 760px; }
+.center-col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.grid { display: grid; gap: 2px; font-family: ui-monospace, monospace; font-size: 12px; max-width: 100%; }
 .grid div { text-align: center; padding: 4px 0; background: var(--surface); border-radius: 4px; color: var(--text-2); }
 .grid div.fixed { box-shadow: inset 0 0 0 1px var(--warn); }
-@media (max-width: 640px) { .sbox-table { margin: 0 16px 14px; } .grid { font-size: 10px; } }
+@media (max-width: 640px) { .grid { font-size: 10px; } }
 
 /* Affine equivalence */
 .equivalence { margin: 0 24px 14px; }
