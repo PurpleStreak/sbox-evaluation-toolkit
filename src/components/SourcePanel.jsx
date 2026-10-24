@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import SearchPanel from './SearchPanel.jsx';
-import { AES_AFFINE, notableExponents, powerMap, randomAffineMap, randomPermutation } from '../core/generators.js';
+import { randomPermutation } from '../core/generators.js';
 import { PRESETS } from '../core/presets.js';
 import { randomSeed } from '../core/random.js';
 import { parseSBox } from '../core/sbox.js';
@@ -10,31 +10,16 @@ import { parseSBox } from '../core/sbox.js';
  */
 
 /**
- * Where S-boxes come from: reference S-boxes, generators and paste.
+ * Where S-boxes come from: reference S-boxes, random permutations and paste.
  * @param {object} props
  * @param {string} props.currentName
  * @param {LoadFn} props.onLoad
  * @param {(msg: string) => void} props.onToast
  */
 export default function SourcePanel({ currentName, onLoad, onToast }) {
-  const [pmBits, setPmBits] = useState(8);
-  const exponents = useMemo(() => notableExponents(pmBits), [pmBits]);
-  const [pmExp, setPmExp] = useState(254);
-  const [pmOut, setPmOut] = useState(/** @type {'aes' | 'none' | 'random'} */ ('aes'));
   const [paste, setPaste] = useState('');
   const [pasteFormat, setPasteFormat] = useState(/** @type {'auto' | 'hex' | 'dec'} */ ('auto'));
   const [pasteError, setPasteError] = useState('');
-
-  const exponent = exponents.some((e) => e.exponent === pmExp) ? pmExp : exponents[0].exponent;
-
-  const buildPowerMap = () => {
-    const seed = randomSeed();
-    const outputMap = pmOut === 'aes' && pmBits === 8 ? AES_AFFINE : pmOut === 'random' ? randomAffineMap(pmBits, seed) : undefined;
-    const { sbox, bijective } = powerMap({ n: pmBits, exponent, outputMap });
-    const suffix = outputMap ? (pmOut === 'aes' ? ' + AES affine' : ` + affine #${seed.toString(16)}`) : '';
-    onLoad(sbox, `x^${exponent} over GF(2^${pmBits})${suffix}`);
-    if (!bijective) onToast(`x^${exponent} is not a permutation of GF(2^${pmBits}): gcd(${exponent}, ${(1 << pmBits) - 1}) ≠ 1.`);
-  };
 
   const loadPaste = () => {
     try {
@@ -61,50 +46,14 @@ export default function SourcePanel({ currentName, onLoad, onToast }) {
       </div>
 
       <div className="group">
-        <span className="lbl">Generate</span>
+        <span className="lbl">Random permutation</span>
         <div className="btn-col">
           <button onClick={() => { const s = randomSeed(); onLoad(randomPermutation(8, s), `Random 8-bit #${s.toString(16)}`); }}>
-            Random 8-bit permutation
+            Random 8-bit
           </button>
           <button onClick={() => { const s = randomSeed(); onLoad(randomPermutation(4, s), `Random 4-bit #${s.toString(16)}`); }}>
-            Random 4-bit permutation
+            Random 4-bit
           </button>
-        </div>
-        <div className="power">
-          <span className="lbl small">
-            <span>
-              Power map S(x) = A(x<sup>d</sup>) over GF(2ⁿ)
-            </span>
-          </span>
-          <div className="inline-fields">
-            <label className="lbl small">
-              bits
-              <select value={pmBits} onChange={(e) => setPmBits(Number(e.target.value))}>
-                {[3, 4, 5, 6, 7, 8].map((v) => (
-                  <option key={v} value={v}>{v}</option>
-                ))}
-              </select>
-            </label>
-            <label className="lbl small grow">
-              exponent d
-              <select value={exponent} onChange={(e) => setPmExp(Number(e.target.value))}>
-                {exponents.map((e) => (
-                  <option key={e.exponent} value={e.exponent} title={e.note}>
-                    {e.name} — d = {e.exponent}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <label className="lbl small">
-            output map A
-            <select value={pmOut} onChange={(e) => setPmOut(/** @type {'aes' | 'none' | 'random'} */ (e.target.value))}>
-              <option value="aes" disabled={pmBits !== 8}>AES affine map (8-bit)</option>
-              <option value="none">none</option>
-              <option value="random">random affine map</option>
-            </select>
-          </label>
-          <button onClick={buildPowerMap}>Build power map</button>
         </div>
       </div>
 

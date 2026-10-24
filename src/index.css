@@ -168,7 +168,6 @@ canvas.heatmap:focus-visible { outline: 2px solid var(--accent); outline-offset:
 .btn-col { display: flex; flex-direction: column; gap: 6px; }
 .btn-row { display: flex; gap: 6px; }
 .btn-row > * { flex: 1; }
-.power { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
 .inline-fields { display: flex; gap: 6px; }
 .inline-fields > .lbl { flex: 1; min-width: 0; }
 .inline-fields > .lbl.grow { flex: 1; min-width: 0; }
