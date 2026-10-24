@@ -11,7 +11,6 @@ import VerdictRow from './components/VerdictRow.jsx';
 import { analyze } from './core/analyze.js';
 import { getPreset } from './core/presets.js';
 import { strongestDdtCell } from './lib/tables.js';
-import { usePersistentState } from './lib/usePersistentState.js';
 
 /**
  * @typedef {object} Current
@@ -33,12 +32,6 @@ export default function App() {
   const [selected, setSelected] = useState(
     /** @type {() => { r: number, c: number } | null} */ (() => strongestDdtCell(current.analysis)),
   );
-  const [mode, setMode] = usePersistentState('sbox.mode', /** @type {'explain' | 'expert'} */ ('explain'));
-  const [theme, setTheme] = usePersistentState('sbox.theme', /** @type {'dark' | 'light'} */ ('dark'));
-
-  // Apply the theme during render (not in an effect): child canvases read the CSS colour
-  // variables in their own effects, which run before a parent's effect would.
-  if (document.documentElement.dataset.theme !== theme) document.documentElement.dataset.theme = theme;
 
   const load = useCallback(
     /**
@@ -63,15 +56,8 @@ export default function App() {
   );
 
   return (
-    <div className={`app mode-${mode}`}>
-      <TopBar
-        name={current.name}
-        properties={current.analysis.properties}
-        mode={mode}
-        onMode={setMode}
-        theme={theme}
-        onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      />
+    <div className="app">
+      <TopBar name={current.name} properties={current.analysis.properties} />
       <VerdictRow analysis={current.analysis} />
       <main className="workbench">
         <SourcePanel currentName={current.name} onLoad={load} />
@@ -84,7 +70,6 @@ export default function App() {
           }}
           selected={selected}
           onSelect={setSelected}
-          theme={theme}
         />
         <aside className="panel inspector">
           <h3>Inspector</h3>

@@ -77,9 +77,9 @@ export default function MetricStrips({ analysis, prev }) {
                 ) : (
                   <span className="muted">no random baseline for {n}→{m} bits</span>
                 )}
-                {def.better !== 'none' && <span className="expert-only"> · {def.better.replace(/-/g, ' ')} is better</span>}
+                {def.better !== 'none' && <span> · {def.better.replace(/-/g, ' ')} is better</span>}
               </div>
-              <p className="explain-only desc">{def.description}</p>
+              <p className="desc">{def.description}</p>
             </div>
           );
         })}

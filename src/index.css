@@ -1,6 +1,5 @@
-/* Design tokens. Dark (matching the project slides) is the default; light is for print/screenshots. */
-:root,
-:root[data-theme='dark'] {
+/* Design tokens (dark, matching the project slides). */
+:root {
   color-scheme: dark;
   --page: #000000;
   --panel: #111110;
@@ -23,26 +22,6 @@
   --div-pos: #3987e5;
   --div-neg: #e66767;
 }
-:root[data-theme='light'] {
-  color-scheme: light;
-  --page: #f9f9f7;
-  --panel: #ffffff;
-  --surface: #fcfcfb;
-  --hair: rgba(11, 11, 11, 0.1);
-  --grid: #e1e0d9;
-  --text: #0b0b0b;
-  --text-2: #52514e;
-  --muted: #6d6b66;
-  --accent: #4d7c0f;
-  --accent-ink: #ffffff;
-  --you: #2a78d6;
-  --ref: #eb6834;
-  --hist: #c3c2b7;
-  --trivial: #e1e0d9;
-  --div-mid: #f0efec;
-  --div-pos: #1c5cab;
-  --div-neg: #c03a3a;
-}
 
 * { box-sizing: border-box; }
 html { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.45; }
@@ -56,8 +35,6 @@ code, .mono { font-family: ui-monospace, 'Cascadia Code', Menlo, monospace; font
 .accent { color: var(--accent); }
 .err { color: var(--crit); min-height: 1em; }
 
-.mode-explain .expert-only { display: none !important; }
-.mode-expert .explain-only { display: none !important; }
 
 button, select, textarea, input[type='number'] {
   font: inherit; color: var(--text); background: var(--surface);
@@ -68,7 +45,6 @@ button:hover:not(:disabled) { border-color: var(--accent); }
 button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 button:disabled { opacity: 0.45; cursor: default; }
 button.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-weight: 600; }
-button.ghost { background: transparent; }
 textarea { width: 100%; resize: vertical; font-family: ui-monospace, monospace; font-size: 12px; }
 select { width: 100%; }
 
@@ -80,10 +56,6 @@ select { width: 100%; }
 .brand { font-size: 20px; }
 .current { flex: 1; display: flex; gap: 8px; align-items: center; min-width: 0; }
 .current strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.toggles { display: flex; gap: 10px; }
-.seg { display: inline-flex; border: 1px solid var(--hair); border-radius: 8px; overflow: hidden; }
-.seg button { border: 0; border-radius: 0; background: transparent; }
-.seg button.on { background: var(--accent); color: var(--accent-ink); }
 
 .section-title { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
 .section-title p { margin: 0; }
@@ -191,6 +163,8 @@ canvas.heatmap:focus-visible { outline: 2px solid var(--accent); outline-offset:
 .status-line { display: flex; align-items: center; gap: 6px; font-weight: 600; }
 .status-line .ico { width: 18px; height: 18px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 12px; background: var(--grid); color: var(--text); }
 .status-line .ico.good { background: var(--good); color: #0b0b0b; }
+.maps-disclosure { margin-top: 6px; }
+.maps-disclosure summary { cursor: pointer; color: var(--text-2); }
 .maps { display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
 .map-view pre { margin: 2px 0 0; font-size: 11px; line-height: 1.25; color: var(--text-2); }
 @media (max-width: 640px) { .equivalence { margin: 0 16px 14px; } }

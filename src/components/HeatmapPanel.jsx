@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import Heatmap from './Heatmap.jsx';
 import { get } from '../core/matrix.js';
-import { cssVar, isDarkTheme, sequential } from '../lib/colors.js';
+import { cssVar, sequential } from '../lib/colors.js';
 import { hex, hexWidth } from '../lib/format.js';
 import { TABLES, TABLE_IDS, tableStats } from '../lib/tables.js';
 
@@ -12,9 +12,8 @@ import { TABLES, TABLE_IDS, tableStats } from '../lib/tables.js';
  * @param {(t: import('../lib/tables.js').TableId) => void} props.onTable
  * @param {{ r: number, c: number } | null} props.selected
  * @param {(cell: { r: number, c: number }) => void} props.onSelect
- * @param {string} props.theme
  */
-export default function HeatmapPanel({ analysis, table, onTable, selected, onSelect, theme }) {
+export default function HeatmapPanel({ analysis, table, onTable, selected, onSelect }) {
   const [logScale, setLogScale] = useState(false);
   const [outlineMax, setOutlineMax] = useState(true);
   const [hover, setHover] = useState(/** @type {{ r: number, c: number, x: number, y: number } | null} */ (null));
@@ -28,11 +27,10 @@ export default function HeatmapPanel({ analysis, table, onTable, selected, onSel
   const outline = outlineMax && maxCount <= 64;
 
   const legendGradient = useMemo(() => {
-    void theme;
     if (info.signed) return `linear-gradient(to top, ${cssVar('--div-neg')}, ${cssVar('--div-mid')}, ${cssVar('--div-pos')})`;
-    const stops = [0.15, 0.4, 0.7, 1].map((t) => `rgb(${sequential(t, isDarkTheme()).join(',')})`);
+    const stops = [0.15, 0.4, 0.7, 1].map((t) => `rgb(${sequential(t).join(',')})`);
     return `linear-gradient(to top, ${cssVar('--surface')}, ${stops.join(', ')})`;
-  }, [info.signed, theme]);
+  }, [info.signed]);
 
   /** @param {number} r @param {number} c */
   const tooltip = (r, c) => {
@@ -77,7 +75,7 @@ export default function HeatmapPanel({ analysis, table, onTable, selected, onSel
           <label className="check"><input type="checkbox" checked={outlineMax} onChange={(e) => setOutlineMax(e.target.checked)} /> outline maxima</label>
         </div>
       </div>
-      <p className="explain-only small muted">{info.blurb}</p>
+      <p className="small muted">{info.blurb}</p>
 
       <div className="heat-body">
         <div className="axis-y" aria-hidden="true">← {info.rows}</div>
@@ -90,7 +88,6 @@ export default function HeatmapPanel({ analysis, table, onTable, selected, onSel
             logScale={logScale}
             outlineMax={outline}
             selected={selected}
-            theme={theme}
             onHover={setHover}
             onSelect={onSelect}
             label={`${info.title}, ${matrix.rows} by ${matrix.cols}. Use arrow keys to move the selection.`}

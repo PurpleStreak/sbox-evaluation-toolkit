@@ -19,7 +19,7 @@ export default function VerdictRow({ analysis }) {
     <section className="verdict-wrap" aria-label="Attack verdict">
       <div className="section-title">
         <h2>Attack verdict</h2>
-        <p className="explain-only muted">
+        <p className="muted">
           How this S-box holds up against each family of attacks, judged against the best known values and 10,000 random
           permutations of the same size. The S-box is judged in isolation; a full cipher also depends on its other layers.
         </p>

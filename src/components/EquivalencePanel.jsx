@@ -40,6 +40,22 @@ function MapView({ map, n, name }) {
 }
 
 /**
+ * The affine maps A and B, collapsed by default.
+ * @param {{ A: import('../core/generators.js').AffineMap, B: import('../core/generators.js').AffineMap, n: number }} props
+ */
+function MapsDisclosure({ A, B, n }) {
+  return (
+    <details className="maps-disclosure">
+      <summary className="small">show the affine maps A and B</summary>
+      <div className="maps">
+        <MapView map={A} n={n} name="A" />
+        <MapView map={B} n={n} name="B" />
+      </div>
+    </details>
+  );
+}
+
+/**
  * Affine-equivalence results for the current S-box, computed in a Web Worker on every load.
  * @param {object} props
  * @param {import('../core/sbox.js').SBox} props.sbox
@@ -83,7 +99,7 @@ export default function EquivalencePanel({ sbox, name }) {
           <span className="chip good">≡ {equivalentTo.map((c) => c.name).join(', ')}</span>
         )}
       </div>
-      <p className="explain-only small muted">
+      <p className="small muted">
         Two S-boxes are affine equivalent when one is the other with affine re-encodings of its input and output (S₂ = B∘S₁∘A).
         They then share every property marked with a lock, so a &ldquo;new&rdquo; S-box that is equivalent to a known one is that
         S-box in disguise. Checked with the Biryukov et al. (2003) algorithm; when equivalent, the maps A and B are found and verified.
@@ -105,10 +121,7 @@ export default function EquivalencePanel({ sbox, name }) {
                     {name} is optimal (δ = 4, NL = 4) and affine equivalent to class <b>{cls.label}</b> of the 16 classes of
                     optimal 4-bit S-boxes.
                   </p>
-                  <div className="expert-only maps">
-                    <MapView map={cls.A} n={4} name="A" />
-                    <MapView map={cls.B} n={4} name="B" />
-                  </div>
+                  <MapsDisclosure A={cls.A} B={cls.B} n={4} />
                 </>
               ) : (
                 <>
@@ -140,10 +153,7 @@ export default function EquivalencePanel({ sbox, name }) {
                     <p className="small muted">
                       {same ? 'same lookup table' : `${name}(x) = B(${c.name}(A(x))) · maps found in ${Math.round(entry.ms ?? 0)} ms`}
                     </p>
-                    {!same && <div className="expert-only maps">
-                      <MapView map={r.A} n={sbox.n} name="A" />
-                      <MapView map={r.B} n={sbox.n} name="B" />
-                    </div>}
+                    {!same && <MapsDisclosure A={r.A} B={r.B} n={sbox.n} />}
                   </>
                 ) : r.status === 'not-equivalent' ? (
                   <>

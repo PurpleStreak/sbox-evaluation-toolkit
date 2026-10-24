@@ -36,17 +36,17 @@ export default function Inspector({ analysis, table, selected }) {
 
   let body;
   if (trivial) {
-    body = <p className="explain-only">This is a trivial {a === 0 ? 'row' : 'column'}: it always holds the extreme value and is ignored by every metric.</p>;
+    body = <p>This is a trivial {a === 0 ? 'row' : 'column'}: it always holds the extreme value and is ignored by every metric.</p>;
   } else if (table === 'ddt') {
     const pairs = differentialPairs(s, a, b).filter((x) => x < (x ^ a));
     const avg = (size / (1 << s.m)).toFixed(2);
     body = (
       <>
-        <p className="explain-only">
+        <p>
           Inputs differing by <code>{hex(a, wi)}</code> give outputs differing by <code>{hex(b, wo)}</code> for <b>{v} of {size}</b> inputs (probability {(v / size).toFixed(3)}). A random function averages {avg}.
           {v >= 4 ? ' The more such pairs, the easier a differential attack.' : ''}
         </p>
-        <p className="expert-only mono">p = {v}/{size} = 2^{v ? Math.log2(v / size).toFixed(2) : '−∞'}</p>
+        <p className="mono">p = {v}/{size} = 2^{v ? Math.log2(v / size).toFixed(2) : '−∞'}</p>
         {pairs.length > 0 && (
           <>
             <div className="small muted">Input pairs (x, x ⊕ a) → (S(x), S(x ⊕ a)):</div>
@@ -66,17 +66,17 @@ export default function Inspector({ analysis, table, selected }) {
     body = (
       <>
         <div className="eq">{bitsExpr(a, 'x', s.n)} = {bitsExpr(b, 'y', s.m)}</div>
-        <p className="explain-only">
+        <p>
           This linear equation between input bits x and output bits y = S(x) holds for <b>{count} of {size}</b> inputs. Ideal is {size / 2} (a coin flip); the further from it, the more useful to a linear attack.
         </p>
-        <p className="expert-only mono">
+        <p className="mono">
           Pr = {count}/{size}, bias ε = {(v / size).toFixed(4)}, correlation {((2 * v) / size).toFixed(4)}
         </p>
       </>
     );
   } else if (table === 'bct') {
     body = (
-      <p className="explain-only">
+      <p>
         A boomerang with input difference <code>{hex(a, wi)}</code> and output difference <code>{hex(b, wo)}</code> returns for <b>{v} of {size}</b> inputs. The DDT alone would predict {get(analysis.tables.ddt, a, b)}.
       </p>
     );
@@ -84,7 +84,7 @@ export default function Inspector({ analysis, table, selected }) {
     body = (
       <>
         <div className="eq">{bitsExpr(b, 'y', s.m)} of S(x) ⊕ S(x ⊕ {hex(a, wi)}) = 0</div>
-        <p className="explain-only">
+        <p>
           This holds for <b>{v + size / 2} of {size}</b> inputs (ideal {size / 2}).
           {Math.abs(v) === size / 2 ? <b> It always (or never) holds: a linear structure.</b> : null}
         </p>
