@@ -12,10 +12,3 @@ export const hex = (v, width = 2) => '0x' + v.toString(16).toUpperCase().padStar
  * @returns {number}
  */
 export const hexWidth = (bits) => Math.max(1, Math.ceil(bits / 4));
-
-/**
- * Integers as-is, other numbers to 4 decimals, null as an em dash.
- * @param {number | null | undefined} x
- * @returns {string}
- */
-export const fmt = (x) => (x === null || x === undefined ? '—' : Number.isInteger(x) ? String(x) : x.toFixed(4));
