@@ -70,7 +70,7 @@ export default function Inspector({ analysis, table, selected, onSelect }) {
       <div className="stat">
         <div className="small muted">{MAX_NAME[table]}</div>
         <div>
-          <b>{tableMax}</b> <span className="muted">· {atMax.toLocaleString('en-US')} cell{atMax === 1 ? '' : 's'} reach it</span>
+          <b>{tableMax}</b> <span className="muted">· {atMax.toLocaleString('en-US')} {atMax === 1 ? 'cell reaches' : 'cells reach'} it</span>
         </div>
       </div>
       <div className="stat">
