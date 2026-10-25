@@ -24,3 +24,6 @@ Thumbs.db
 # Presentation (kept out of the repository) and Windows download markers
 *.pptx
 *:Zone.Identifier
+
+# Presentation sources, tooling and screenshots (local only)
+presentation/
